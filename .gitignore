@@ -1,0 +1,9 @@
+/.token-oauth
+/.idea/
+/credentials_google.json
+/*.list
+/token.json
+/venv/
+/account_info.py
+/bidict_ticktick_gcalendar.dict
+/data/
