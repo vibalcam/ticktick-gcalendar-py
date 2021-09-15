@@ -7,3 +7,6 @@
 /account_info.py
 /bidict_ticktick_gcalendar.dict
 /data/
+/logs/
+/run.sh
+/__pycache__/

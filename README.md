@@ -2,7 +2,7 @@
 
 ## Requirements
 
-Meet requirements following:
+Meet the following requirements:
 - ticktick-py: https://github.com/lazeroffmichael/ticktick-py
 - google calendar python: https://developers.google.com/tasks/quickstart/python
 - Set up info in account_info.py (you can use account_info_example.py as template and info from -p option to get TickTick calendar ids)
@@ -17,11 +17,11 @@ Meet requirements following:
 
 ## Features
 
-It uses the package ticktick-py and google calendar for python to syncronize between Ticktick and Google Calendar.
+It uses the package ticktick-py and google calendar for python to sync between Ticktick and Google Calendar.
 
-It is set up so the syncronization occurs in the following way:
-- It syncronizes the changes in the selected lists of Ticktick to a specific calendar in Google Calendar
-- It syncronizes the selected calendars in Google Calendar to a specific calendar in Ticktick
+It is set up so the sync occurs in the following way:
+- It syncs the changes in the selected lists of Ticktick to a specific calendar in Google Calendar
+- It syncs the selected calendars in Google Calendar to a specific calendar in Ticktick
 
 ## Warnings
 
