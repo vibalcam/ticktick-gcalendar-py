@@ -175,12 +175,12 @@ class GCalendarApi(Api):
             creds = Credentials.from_authorized_user_file(credentials['TOKEN_FILENAME'], credentials['SCOPES'])
             # If there are no (valid) credentials available, let the user log in.
         if not creds or not creds.valid:
-            if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
-            elif renew:
+            if renew:
                 flow = InstalledAppFlow.from_client_secrets_file(
                     credentials['credentials'], credentials['SCOPES'])
                 creds = flow.run_local_server(port=0)
+            elif creds and creds.expired and creds.refresh_token:
+                creds.refresh(Request())
             else:
                 raise Exception("Renewal for google needed: add with renew true")
             # Save the credentials for the next run
@@ -452,6 +452,9 @@ class TickTickDiff(Diff):
         while self.deleted:
             task = self.deleted.pop()
             print(f"Delete {self.__class__}: {task.title}")
+            if 'startDate' not in task or 'dueDate' not in task:
+                self.api.change_tasks(task, delete=True)
+                continue
             gcal_id = bidict_tick_gcalendar[task['id']]
             try:
                 gcalendar_api.delete(gcal_id)
@@ -540,8 +543,8 @@ class GCalendarDiff(Diff):
             task = self.deleted.pop()
             print(f"Delete {self.__class__}: {task.title}")
             task_tick_id = bidict_tick_gcalendar.get_inverse(task['id'])[0]
-            task_tick = tick_tasks[task_tick_id]
             try:
+                task_tick = tick_tasks[task_tick_id]
                 ticktick_api.complete(task_tick)
                 self.api.change_tasks(task, delete=True)
                 del bidict_tick_gcalendar[task_tick_id]
@@ -556,6 +559,8 @@ def main(args):
 
     tick = TickTickApi(renew=args.renew)
     gtasks = GCalendarApi(renew=args.renew)
+    if args.renew:
+        return
     bidict_path = 'data/bidict_ticktick_gcalendar.dict'
 
     if args.tick_print:
@@ -588,6 +593,11 @@ def main(args):
         gtasks.save_old_tasks()
         tick.save_old_tasks()
         return
+    elif args.delete_all_gcal:
+        for event_id in list(gtasks.get_tasks().keys()):
+            gtasks.delete(event_id)
+        print("You can now delete the data folder")
+        return
 
     try:
         GCalendarDiff(gtasks).sync_ticktick(tick, bidict_ticktick_gcalendar)
@@ -608,6 +618,7 @@ if __name__ == "__main__":
     parser.add_argument('-p', '--tick_print', action='store_true')
     parser.add_argument('-rt', '--remove_tick', type=str, default=None)
     parser.add_argument('-rg', '--remove_gcal', type=str, default=None)
+    parser.add_argument('-dg', '--delete_all_gcal', action='store_true')    # use to restore
 
     arguments = parser.parse_args()
     main(arguments)
