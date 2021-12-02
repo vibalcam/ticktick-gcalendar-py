@@ -394,22 +394,23 @@ class TickTickDiff(Diff):
         while self.updated:
             task = self.updated.pop()
             print(f"Update {self.__class__}: {task.title}")
-            id_gcal = bidict_tick_gcalendar.get(task['id'], None)
-            if id_gcal is None:
-                self.added.add(task)
-                continue
-            task_gcal = gcal_tasks[id_gcal]
-            if 'startDate' not in task or 'dueDate' not in task:
-                gcalendar_api.delete(id_gcal)
-                self.api.change_tasks(task)
-                del bidict_tick_gcalendar[task['id']]
-                continue
-            start, all_day = ticktick_get_datetime(task, True)
-            end, all_day = ticktick_get_datetime(task, False)
-            if all_day:     # fix for time in ticktick
-                start += timedelta(days=1)
-                end += timedelta(days=1)
             try:
+                id_gcal = bidict_tick_gcalendar.get(task['id'], None)
+                if id_gcal is None:
+                    self.added.add(task)
+                    continue
+                task_gcal = gcal_tasks[id_gcal]
+                if 'startDate' not in task or 'dueDate' not in task:
+                    gcalendar_api.delete(id_gcal)
+                    self.api.change_tasks(task)
+                    del bidict_tick_gcalendar[task['id']]
+                    continue
+                start, all_day = ticktick_get_datetime(task, True)
+                end, all_day = ticktick_get_datetime(task, False)
+                if all_day:     # fix for time in ticktick
+                    start += timedelta(days=1)
+                    end += timedelta(days=1)
+
                 task_gcal = gcalendar_api.build_event(
                     summary=task['title'],
                     start=start.date() if all_day else start,
@@ -427,15 +428,16 @@ class TickTickDiff(Diff):
         while self.added:
             task = self.added.pop()
             print(f"Add {self.__class__}: {task.title}")
-            if 'startDate' not in task or 'dueDate' not in task:
-                self.api.change_tasks(task)
-                continue
-            start, all_day = ticktick_get_datetime(task, True)
-            end, all_day = ticktick_get_datetime(task, False)
-            if all_day:     # fix for time in ticktick
-                start += timedelta(days=1)
-                end += timedelta(days=1)
             try:
+                if 'startDate' not in task or 'dueDate' not in task:
+                    self.api.change_tasks(task)
+                    continue
+                start, all_day = ticktick_get_datetime(task, True)
+                end, all_day = ticktick_get_datetime(task, False)
+                if all_day:     # fix for time in ticktick
+                    start += timedelta(days=1)
+                    end += timedelta(days=1)
+
                 added_id = gcalendar_api.insert(gcalendar_api.build_event(
                     summary=task['title'],
                     start=start.date() if all_day else start,
@@ -452,11 +454,12 @@ class TickTickDiff(Diff):
         while self.deleted:
             task = self.deleted.pop()
             print(f"Delete {self.__class__}: {task.title}")
-            if 'startDate' not in task or 'dueDate' not in task:
-                self.api.change_tasks(task, delete=True)
-                continue
-            gcal_id = bidict_tick_gcalendar[task['id']]
             try:
+                if 'startDate' not in task or 'dueDate' not in task:
+                    self.api.change_tasks(task, delete=True)
+                    continue
+                gcal_id = bidict_tick_gcalendar[task['id']]
+
                 gcalendar_api.delete(gcal_id)
                 self.api.change_tasks(task, delete=True)
                 del bidict_tick_gcalendar[task['id']]
@@ -479,32 +482,33 @@ class GCalendarDiff(Diff):
         while self.updated:
             task = self.updated.pop()
             print(f"Update {self.__class__}: {task.title}")
-            id_tick = bidict_tick_gcalendar.inverse.get(task['id'], None)
-            if id_tick is None:
-                self.added.add(task)
-                continue
-            task_tick = tick_tasks[id_tick[0]]
-            start, all_day = gcalendar_get_datetime(task['start'])
-            end, _ = gcalendar_get_datetime(task['end'])
-            time_zone = get_timezone_name(start)
-            tick_date = tick.dates(start=start, due=end, tz=time_zone)
-            if all_day:     # fix for time in ticktick
-                end -= timedelta(days=1)
-            if start < now:  # if after, then delete
-                tick.delete(task_tick)
-                self.api.change_tasks(task)
-                del bidict_tick_gcalendar[task_tick['id']]
-                continue
-            task_tick = ticktick_api.build_task(
-                title=task.get('summary', ""),
-                all_day=all_day,
-                content=task.get('description', ""),
-                end=tick_date['dueDate'],
-                start=tick_date['startDate'],
-                time_zone=time_zone,
-                task=task_tick
-            )
             try:
+                id_tick = bidict_tick_gcalendar.inverse.get(task['id'], None)
+                if id_tick is None:
+                    self.added.add(task)
+                    continue
+                task_tick = tick_tasks[id_tick[0]]
+                start, all_day = gcalendar_get_datetime(task['start'])
+                end, _ = gcalendar_get_datetime(task['end'])
+                time_zone = get_timezone_name(start)
+                tick_date = tick.dates(start=start, due=end, tz=time_zone)
+                if all_day:     # fix for time in ticktick
+                    end -= timedelta(days=1)
+                if start < now:  # if after, then delete
+                    tick.delete(task_tick)
+                    self.api.change_tasks(task)
+                    del bidict_tick_gcalendar[task_tick['id']]
+                    continue
+                task_tick = ticktick_api.build_task(
+                    title=task.get('summary', ""),
+                    all_day=all_day,
+                    content=task.get('description', ""),
+                    end=tick_date['dueDate'],
+                    start=tick_date['startDate'],
+                    time_zone=time_zone,
+                    task=task_tick
+                )
+
                 ticktick_api.update(task_tick)
                 self.api.change_tasks(task)
             except Exception as e:
@@ -515,15 +519,16 @@ class GCalendarDiff(Diff):
         while self.added:
             task = self.added.pop()
             print(f"Add {self.__class__}: {task.title}")
-            start, all_day = gcalendar_get_datetime(task['start'])
-            end, _ = gcalendar_get_datetime(task['end'])
-            time_zone = get_timezone_name(start)
-            if all_day:     # fix for time in ticktick
-                end -= timedelta(days=1)
-            if start < now:
-                self.api.change_tasks(task)
-                continue
             try:
+                start, all_day = gcalendar_get_datetime(task['start'])
+                end, _ = gcalendar_get_datetime(task['end'])
+                time_zone = get_timezone_name(start)
+                if all_day:     # fix for time in ticktick
+                    end -= timedelta(days=1)
+                if start < now:
+                    self.api.change_tasks(task)
+                    continue
+
                 added_id = ticktick_api.insert(ticktick_api.build_task(
                     title=task.get('summary', ""),
                     content=task.get('description', ""),
@@ -542,8 +547,9 @@ class GCalendarDiff(Diff):
         while self.deleted:
             task = self.deleted.pop()
             print(f"Delete {self.__class__}: {task.title}")
-            task_tick_id = bidict_tick_gcalendar.get_inverse(task['id'])[0]
             try:
+                task_tick_id = bidict_tick_gcalendar.get_inverse(task['id'])[0]
+
                 task_tick = tick_tasks[task_tick_id]
                 ticktick_api.complete(task_tick)
                 self.api.change_tasks(task, delete=True)
