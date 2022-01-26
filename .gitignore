@@ -8,5 +8,8 @@
 /bidict_ticktick_gcalendar.dict
 /data/
 /logs/
-/run.sh
 /__pycache__/
+/ticktick/
+
+*.bk
+*.sh

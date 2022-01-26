@@ -11,11 +11,11 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
-from ticktick.api import TickTickClient  # Main Interface
-from ticktick.oauth2 import OAuth2  # OAuth2 Manager
 
 from account_info import GOOGLE, GOOGLE_INFO, TICKTICK, TICKTICK_INFO  # account information
 from helper import load_dict_from_file, save_dict_to_file, BiDict
+from ticktick.api import TickTickClient  # Main Interface
+from ticktick.oauth2 import OAuth2  # OAuth2 Manager
 
 DEBUG = False
 
@@ -421,7 +421,7 @@ class TickTickDiff(Diff):
                 gcalendar_api.update(task_gcal)
                 self.api.change_tasks(task)
             except Exception as e:
-                del self.api.get_tasks()[task['id']]
+                self.api.get_tasks().pop(task['id'], None)
                 do_on_exception(e)
 
         # Insert
@@ -447,7 +447,7 @@ class TickTickDiff(Diff):
                 self.api.change_tasks(task)
                 bidict_tick_gcalendar[task['id']] = added_id
             except Exception as e:
-                del self.api.get_tasks()[task['id']]
+                self.api.get_tasks().pop(task['id'], None)
                 do_on_exception(e)
 
         # Delete
@@ -464,7 +464,7 @@ class TickTickDiff(Diff):
                 self.api.change_tasks(task, delete=True)
                 del bidict_tick_gcalendar[task['id']]
             except Exception as e:
-                del self.api.get_tasks()[task['id']]
+                self.api.get_tasks().pop(task['id'], None)
                 do_on_exception(e)
 
 
@@ -512,7 +512,7 @@ class GCalendarDiff(Diff):
                 ticktick_api.update(task_tick)
                 self.api.change_tasks(task)
             except Exception as e:
-                del self.api.get_tasks()[task['id']]
+                self.api.get_tasks().pop(task['id'], None)
                 do_on_exception(e)
 
         # Insert
@@ -540,7 +540,7 @@ class GCalendarDiff(Diff):
                 self.api.change_tasks(task)
                 bidict_tick_gcalendar[added_id] = task['id']
             except Exception as e:
-                del self.api.get_tasks()[task['id']]
+                self.api.get_tasks().pop(task['id'], None)
                 do_on_exception(e)
 
         # Delete
@@ -555,7 +555,7 @@ class GCalendarDiff(Diff):
                 self.api.change_tasks(task, delete=True)
                 del bidict_tick_gcalendar[task_tick_id]
             except Exception as e:
-                del self.api.get_tasks()[task['id']]
+                self.api.get_tasks().pop(task['id'], None)
                 do_on_exception(e)
 
 

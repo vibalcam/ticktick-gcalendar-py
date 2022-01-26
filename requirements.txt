@@ -1,4 +1,4 @@
-pytz~=2021.1
+pytz
 ticktick-py
 google-api-python-client
 google-auth-httplib2
