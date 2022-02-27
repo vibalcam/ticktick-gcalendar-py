@@ -620,11 +620,12 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('-r', '--renew', action='store_true')
+    parser.add_argument('-r', '--renew', action='store_true', help="Used to renew credentials")
     parser.add_argument('-p', '--tick_print', action='store_true')
-    parser.add_argument('-rt', '--remove_tick', type=str, default=None)
-    parser.add_argument('-rg', '--remove_gcal', type=str, default=None)
-    parser.add_argument('-dg', '--delete_all_gcal', action='store_true')    # use to restore
+    parser.add_argument('-rt', '--remove_tick', type=str, default=None, help="Used to delete a TickTick event by id")
+    parser.add_argument('-rg', '--remove_gcal', type=str, default=None, help="Used to delete a GCalendar event by id")
+    parser.add_argument('-dg', '--delete_all_gcal', action='store_true',
+                        help="WARNING: deletes all syncronized events. Useful to reset.")
 
     arguments = parser.parse_args()
     main(arguments)
