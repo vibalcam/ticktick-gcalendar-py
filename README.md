@@ -13,7 +13,7 @@ Meet the following requirements:
 - Set up account_info.py
 - Run ticktick-gcalendar.py with -r option to renew tokens
 - Run ticktick-gcalendar.py with no options
-- Run ticktick-gcalendar.py with -rt or -rg to delete an id from memory
+- Run ticktick-gcalendar.py with -rt or -rg to delete an id from memory (useful if an error occurs)
 
 ## Features
 
