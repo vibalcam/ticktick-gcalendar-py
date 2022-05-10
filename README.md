@@ -25,9 +25,12 @@ It is set up so the sync occurs in the following way:
 
 ## Warnings
 
-- Works with python 3.9.5
-- Inbox is exclude by default (to change this look at ticktick-gcalendar.py in TickTickApi.Task __init__ method, line 305)
-- Recurrent events are not supported (have not been tested, thus might result in unexpected behaviour)
+- Tested on python 3.9.5
+- Inbox is excluded by default (to change this look at ticktick-gcalendar.py in TickTickApi.Task __init__ method, line 305)
+- You might need to run the renew option, which regenerates the Google API token, every few weeks due to Google Calendar not accepting the old API token
+- Recurrent events:
+  - Google recurrent events have not been tested (thus might result in unexpected behaviour)
+  - For TickTick recurrent events, only the next event is added to Google Calendar
 
 ## Packages
 
