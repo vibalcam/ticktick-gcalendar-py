@@ -8,12 +8,15 @@ GOOGLE = {
 
 GOOGLE_INFO = {
     'old_filename': 'google_calendar.list',
-    # MUST CHANGE TO ACTUAL VALUES
+    # TODO MUST CHANGE TO ACTUAL VALUES
+    # google calendars that WILL be synced
     'calendar_ids': ['fasdfadfafdsa@group.calendar.google.com'],  # calendar id,
-    # MUST CHANGE TO ACTUAL VALUES
+    # TODO MUST CHANGE TO ACTUAL VALUES
+    # google calendar where events added in ticktick will be added
     'default_project_id': 'fdsafasdffas@group.calendar.google.com',
 }
 
+# TODO COMPLETE WITH API LOGIN INFORMATION
 TICKTICK = {
     'CLIENT_ID': '',
     'CLIENT_SECRET': '',
@@ -25,8 +28,10 @@ TICKTICK = {
 
 TICKTICK_INFO = {
     'old_filename': 'tick_tasks.list',
-    # MUST CHANGE TO ACTUAL VALUES
+    # TODO MUST CHANGE TO ACTUAL VALUES
+    # projects that WILL NOT be synced
     'EXCLUDED_PROJECTS': ['4fsd5a64fa65sd4f'],  # excluded projects ids
-    # MUST CHANGE TO ACTUAL VALUES
+    # TODO MUST CHANGE TO ACTUAL VALUES
+    # ticktick project where events added in google will be added
     'default_project_id': '4f56dsa4f65as4df65a',
 }
