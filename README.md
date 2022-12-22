@@ -1,5 +1,7 @@
 # ticktick-gcalendar-py
 
+2-way sync between TickTick and Google Calendar
+
 ## Requirements
 
 Meet the following requirements:
