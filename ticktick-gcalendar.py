@@ -14,8 +14,8 @@ from googleapiclient.discovery import build
 
 from account_info import GOOGLE, GOOGLE_INFO, TICKTICK, TICKTICK_INFO  # account information
 from helper import load_dict_from_file, save_dict_to_file, BiDict
-from ticktick.api import TickTickClient  # Main Interface
-from ticktick.oauth2 import OAuth2  # OAuth2 Manager
+from ticktick_py.ticktick.api import TickTickClient  # Main Interface
+from ticktick_py.ticktick.oauth2 import OAuth2  # OAuth2 Manager
 
 DEBUG = False
 
@@ -184,6 +184,7 @@ class GCalendarApi(Api):
             else:
                 raise Exception("Renewal for google needed: add with renew true")
             # Save the credentials for the next run
+            print(f"Saving Google renewed credentials as {credentials['TOKEN_FILENAME']}...")
             with open(credentials['TOKEN_FILENAME'], 'w') as token:
                 token.write(creds.to_json())
 
@@ -407,9 +408,9 @@ class TickTickDiff(Diff):
                     continue
                 start, all_day = ticktick_get_datetime(task, True)
                 end, all_day = ticktick_get_datetime(task, False)
-                if all_day:     # fix for time in ticktick
-                    start += timedelta(days=1)
-                    end += timedelta(days=1)
+                # if all_day:     # fix for time in ticktick
+                #     start += timedelta(days=1)
+                #     end += timedelta(days=1)
 
                 task_gcal = gcalendar_api.build_event(
                     summary=task['title'],
@@ -434,9 +435,9 @@ class TickTickDiff(Diff):
                     continue
                 start, all_day = ticktick_get_datetime(task, True)
                 end, all_day = ticktick_get_datetime(task, False)
-                if all_day:     # fix for time in ticktick
-                    start += timedelta(days=1)
-                    end += timedelta(days=1)
+                # if all_day:     # fix for time in ticktick
+                #     start += timedelta(days=1)
+                #     end += timedelta(days=1)
 
                 added_id = gcalendar_api.insert(gcalendar_api.build_event(
                     summary=task['title'],

@@ -4,10 +4,36 @@ This script provides 2-way sync between TickTick and Google Calendar.
 
 To provide "continuous" 2-way sync, it can be programmed to run every few minutes using crontab or any other program that allows running Python scripts.
 
+## Installation
+
+1. Create conda environment
+```bash
+conda create -n tick python=3.9.5
+conda activate tick
+```
+
+2. Clone the repository
+```bash
+git clone https://github.com/vibalcam/ticktick-gcalendar-py.git
+```
+
+3. Install the required packages
+```bash
+pip install -r requirements.txt
+```
+
+4. Install ticktick_py (i.e., clone and install requirements)
+```bash
+git clone https://github.com/vibalcam/ticktick_py.git
+pip install -r ticktick_py/requirements.txt
+```
+
+5. Meet requirements (see below)
+
 ## Requirements
 
 Meet the following requirements:
-- ticktick-py: https://github.com/lazeroffmichael/ticktick-py
+- ticktick-py: https://github.com/vibalcam/ticktick_py
 - google calendar python: https://developers.google.com/tasks/quickstart/python
 - Set up info in account_info.py (you can use account_info_example.py as template and info from -p option to get TickTick calendar ids)
 
