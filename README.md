@@ -22,7 +22,7 @@ git clone https://github.com/vibalcam/ticktick-gcalendar-py.git
 pip install -r requirements.txt
 ```
 
-4. Install ticktick_py (i.e., clone and install requirements)
+4. Install [ticktick_py fork](https://github.com/vibalcam/ticktick_py) (i.e., clone and install requirements). This fork solves a minor unresolved issue in the [original repository](https://github.com/lazeroffmichael/ticktick-py) (as of April 13, 2024)
 ```bash
 git clone https://github.com/vibalcam/ticktick_py.git
 pip install -r ticktick_py/requirements.txt
